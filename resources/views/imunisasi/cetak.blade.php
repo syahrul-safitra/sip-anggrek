@@ -20,7 +20,7 @@
         }
 
         .container {
-            width: 700px;
+            width: 7clear00px;
             margin: 0 auto;
         }
 
