@@ -60,41 +60,20 @@
                     <li><a href="{{ url('/all-berita') }}"
                             class="{{ Request::is('all-berita*') ? 'active' : '' }}">Berita</a></li>
 
-                    <li><a href="{{ url('/data-imunisasi') }}"
+                    <li><a href="{{ url('/cek-imunisasi-anak') }}"
                             class="{{ Request::is('data-imunisasi') ? 'active' : '' }}">Imunisasi</a></li>
-                    <li><a href="{{ url('/data-tumbuh-kembang-anak') }}"
+                    <li><a href="{{ url('/cek-tumbuh-kembang-anak') }}"
                             class="{{ Request::is('data-tumbuh-kembang-anak') ? 'active' : '' }}">Tumbuh Kembang
                             Anak</a></li>
-                    {{-- <li><a href="courses.html">Courses</a></li> --}}
-                    {{-- <li><a href="trainers.html">Trainers</a></li> --}}
-                    {{-- <li><a href="events.html">Events</a></li> --}}
-                    {{-- <li><a href="pricing.html">Pricing</a></li> --}}
-                    {{-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
-                                class="bi bi-chevron-down toggle-dropdown"></i></a>
-                        <ul>
-                            <li><a href="#">Dropdown 1</a></li>
-                            <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i
-                                        class="bi bi-chevron-down toggle-dropdown"></i></a>
-                                <ul>
-                                    <li><a href="#">Deep Dropdown 1</a></li>
-                                    <li><a href="#">Deep Dropdown 2</a></li>
-                                    <li><a href="#">Deep Dropdown 3</a></li>
-                                    <li><a href="#">Deep Dropdown 4</a></li>
-                                    <li><a href="#">Deep Dropdown 5</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">Dropdown 2</a></li>
-                            <li><a href="#">Dropdown 3</a></li>
-                            <li><a href="#">Dropdown 4</a></li>
-                        </ul>
-                    </li> --}}
-                    {{-- <li><a href="contact.html">Contact</a></li> --}}
+                    <li><a href="{{ url('profile/') }}">Profile</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
 
-            <a class="btn-getstarted" href="{{ url('login') }}">Login</a>
-
+            <form action="{{ url('logout') }}" method="POST">
+                @csrf
+                <button class="btn-getstarted" style="margin-right: 5px">Logout</button>
+            </form>
 
         </div>
     </header>

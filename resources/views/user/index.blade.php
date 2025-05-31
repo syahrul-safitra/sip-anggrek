@@ -229,6 +229,12 @@
     <!-- Trainers Index Section -->
     <section id="trainers-index" class="section trainers-index">
 
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Kader</h2>
+            <p>Anggota Posyandu</p>
+        </div><!-- End Section Title -->
+
         <div class="container">
 
             <div class="row">

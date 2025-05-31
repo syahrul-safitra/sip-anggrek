@@ -47,8 +47,6 @@
 
                                         </div>
 
-
-
                                         <div class="form-group">
 
                                             <label for="">Status Libur</label>

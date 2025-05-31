@@ -74,7 +74,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode</th>
+                                        <th>NIK Anak</th>
                                         <th>Nama</th>
                                         <th>Tanggal</th>
                                         <th>Jenis Imunisasi</th>
@@ -86,7 +86,7 @@
                                     @foreach ($imunisasis as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->kode_anak }}</td>
+                                            <td>{{ $item->nik_anak }}</td>
                                             <td>{{ $item->anak->nama }}</td>
                                             <td>{{ $item->tanggal }}</td>
                                             <td>{{ $item->jenis_imunisasi }}</td>

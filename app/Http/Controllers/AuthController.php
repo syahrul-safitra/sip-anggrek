@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -17,28 +18,25 @@ class AuthController extends Controller
     }
 
     public function authenticate(Request $request) {
+        
         $credentials = $request->validate([
             'email' => 'required|max:30|', 
             'password' => 'required|max:20'
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('dashboard');
+        if (Auth::guard('admin')->attempt($credentials)) {
+            return redirect('dashboard');
         }
 
         return back()->with('loginError', 'Login Failed');
     }
 
     public function logout(Request $request) {
-        Auth::logout();
 
-        $request->session()->invalidate();
+        Auth::guard('parent')->logout();
+        Auth::guard('admin')->logout();
 
-        $request->session()->regenerateToken();
-
-        return redirect('/');
+        return redirect('/login');
 
     }
 
@@ -58,6 +56,24 @@ class AuthController extends Controller
         $user->update($validated);
 
         return back()->with('success', 'Berhasil mengupdate data');
+    }
+
+    // Auth USER :
+    public function loginUser() {
+        return view('user.login');
+    }
+
+    public function authenticateUser(Request $request) {
+        $credentials = $request->validate([
+            'no_telepon' => 'required|max:15|', 
+            'password' => 'required|max:20'
+        ]);
+
+        if (Auth::guard('parent')->attempt($credentials)) {
+            return redirect()->intended('/');
+        }
+
+        return back()->with('loginError', 'Login Failed');
     }
 
 }

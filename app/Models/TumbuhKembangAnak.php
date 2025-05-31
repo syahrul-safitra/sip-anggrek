@@ -10,7 +10,7 @@ class TumbuhKembangAnak extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kode_anak',
+        'nik_anak',
         'tanggal',
         'berat_badan', 
         'tinggi_badan',
@@ -19,7 +19,9 @@ class TumbuhKembangAnak extends Model
     ];
 
     public function anak() {
-        return $this->belongsTo(Anak::class, 'kode_anak', 'kode_anak');
+        return $this->belongsTo(Anak::class, 'nik_anak', 'nik_anak');
     }
+
+    
 
 }

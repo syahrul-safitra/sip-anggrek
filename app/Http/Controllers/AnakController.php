@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anak;
+use App\Models\Parentt;
+
 use Illuminate\Http\Request;
 
 class AnakController extends Controller
@@ -14,7 +16,7 @@ class AnakController extends Controller
     {
 
         return view('anak.index', [
-            'anaks' => Anak::latest()->get()
+            'anaks' => Anak::with('parent')->latest()->get()
         ]);
     }
 
@@ -23,7 +25,11 @@ class AnakController extends Controller
      */
     public function create()
     {
-        return view('anak.create'); 
+        // return Parentt::select(['nama_ayah', 'nik_ayah'])->orderBy('nama_ayah', 'ASC')->get();
+
+        return view('anak.create', [
+            'parents' => Parentt::select(['nama_ayah', 'nik_ayah'])->orderBy('nama_ayah', 'ASC')->get()
+        ]); 
     }
 
     /**
@@ -31,16 +37,17 @@ class AnakController extends Controller
      */
     public function store(Request $request)
     {
+
         $validated = $request->validate([
-            'kode_anak' => 'required|max:5|unique:anaks',
+            'nik_anak' => 'required|max:16|min:16|unique:anaks',
             'nama' => 'required|max:200',
             'tempat_lahir' => 'required|max:200',
             'jenis_kelamin' => 'required',
             'berat_lahir' => 'required|numeric|max:100',
             'tinggi_lahir' => 'required|numeric|max:100',
             'proses_melahirkan' => 'required',
-            'nama_ibu' => 'required|max:200',
-            'tanggal_lahir' => 'required'
+            'tanggal_lahir' => 'required', 
+            'nik_ayah' => 'required'
         ]);
 
         Anak::create($validated);
@@ -62,7 +69,8 @@ class AnakController extends Controller
     public function edit(Anak $anak)
     {
         return view('anak.edit', [
-            'anak' => $anak
+            'anak' => $anak, 
+            'parents' => Parentt::select(['nama_ayah', 'nik_ayah'])->orderBy('nama_ayah', 'ASC')->get(), 
         ]);
     }
 
@@ -71,6 +79,7 @@ class AnakController extends Controller
      */
     public function update(Request $request, Anak $anak)
     {
+
         $rules = [
             'nama' => 'required|max:200',
             'tempat_lahir' => 'required|max:200',
@@ -78,12 +87,12 @@ class AnakController extends Controller
             'berat_lahir' => 'required|numeric|max:100',
             'tinggi_lahir' => 'required|numeric|max:100',
             'proses_melahirkan' => 'required',
-            'nama_ibu' => 'required|max:200',
-            'tanggal_lahir' => 'required'     
+            'tanggal_lahir' => 'required', 
+            'nik_ayah' => 'required', 
         ];
 
-        if ($request->kode_anak != $anak->kode_anak) {
-            $rules['kode_anak'] =  'required|max:5|unique:anaks';
+        if ($request->nik_anak != $anak->nik_anak) {
+            $rules['nik_anak'] =  'required|max:16|min:16|unique:anaks';
         }
 
         $validated = $request->validate($rules);

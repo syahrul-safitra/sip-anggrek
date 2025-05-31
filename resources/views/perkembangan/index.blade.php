@@ -75,7 +75,8 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode</th>
-                                        <th>Nama</th>
+                                        <th>Nama Anak</th>
+                                        <th>Nama Ayah</th>
                                         <th>Tanggal</th>
                                         <th>Berat Badan</th>
                                         <th>Tinggi Badan</th>
@@ -88,8 +89,9 @@
                                     @foreach ($perkembangans as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->kode_anak }}</td>
+                                            <td>{{ $item->nik_anak }}</td>
                                             <td>{{ $item->anak->nama }}</td>
+                                            <td>{{ $item->anak->parent->nama_ayah }}</td>
                                             <td>{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                             <td>{{ $item->berat_badan }}</td>
                                             <td>{{ $item->tinggi_badan }}</td>

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Imunisasi;
 use App\Models\Anak;
 
-use App\Models\TumbuhKembangAnak;
+use App\Models\Parentt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class ImunisasiController extends Controller
 {
@@ -26,7 +28,7 @@ class ImunisasiController extends Controller
     public function create()
     {
 
-        $dataAnak = Anak::select('nama', 'kode_anak')->get();
+        $dataAnak = Anak::select('nama', 'nik_anak')->get();
 
         $jenisImunisasi = [
             'BC 6 POLI I',
@@ -56,7 +58,7 @@ class ImunisasiController extends Controller
     {
         $validated = $request->validate([
             'jenis_imunisasi' => 'required',
-            'kode_anak' => 'required',
+            'nik_anak' => 'required',
             'catatan' => 'required|max:1000',
             'tanggal' => 'required',
         ]);
@@ -80,7 +82,7 @@ class ImunisasiController extends Controller
     public function edit(Imunisasi $imunisasi)
     {
 
-        $dataAnak = Anak::select('nama', 'kode_anak')->get();
+        $dataAnak = Anak::select('nama', 'nik_anak')->get();
 
         $jenisImunisasi = [
             'BC 6 POLI I',
@@ -111,7 +113,7 @@ class ImunisasiController extends Controller
     {
         $validated = $request->validate([
             'jenis_imunisasi' => 'required',
-            'kode_anak' => 'required',
+            'nik_anak' => 'required',
             'catatan' => 'required|max:1000',
             'tanggal' => 'required'
         ]);
@@ -133,7 +135,7 @@ class ImunisasiController extends Controller
 
     public function cetak(Request $request) {
        
-        $data = Imunisasi::with('anak')->whereBetween('tanggal', [$request->tanggal_awal, $request->tanggal_akhir])->get();        
+        $data = Imunisasi::with('anak.parent')->whereBetween('tanggal', [$request->tanggal_awal, $request->tanggal_akhir])->get();        
 
         return view('imunisasi.cetak', [
             'dataImunisasis' => $data, 
@@ -142,17 +144,25 @@ class ImunisasiController extends Controller
         ]);
     }
 
-    public function dataImunisasi() {
-        // $x = Imunisasi::where('kode_anak', '=', request('kode'))->first();
+    public function dataImunisasi(Anak $anak) {
 
-        $data = [];
-
-        if (request('kode')) {
-            $data = Imunisasi::Filter(request('kode'))->latest()->get();
-        }
+        $anak->load('imunisasi');
         
         return view('user.imunisasi', [
-            'imunisasis' => $data
+            'imunisasis' => $anak->imunisasi
+        ]);
+    }
+
+    public function cekAnakImunisasi(){
+
+
+        $getId = Auth::guard('parent')->user();
+
+        $user = Parentt::find($getId->id);
+
+        return view('user.cekAnakImunisasi', [
+            'parent' => Auth::guard('parent')->user(), 
+            'anaks' => $user->anak
         ]);
     }
 }

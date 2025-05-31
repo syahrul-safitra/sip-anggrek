@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\ImunisasiController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\ParenttController;
 use App\Http\Controllers\TumbuhKembangAnakController;
 use App\Http\Controllers\AnggotaController;
 
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
     return view('user.index', [
         'jumlahAnak' => Anak::count(),
         'imunisasiTahunIni' => Imunisasi::whereYear('tanggal', date('Y'))->count(), 
@@ -37,12 +39,12 @@ Route::get('/', function () {
         'beritas' => Berita::latest()->limit(3)->get(),
         'anggotas' => Anggota::latest()->get()
     ]);
-})->middleware('guest');
+})->middleware('isParent');
 
-Route::get('all-berita/{beritum}', [BeritaController::class, 'show'])->middleware('guest');
-Route::get('all-berita', [BeritaController::class, 'allBerita'])->middleware('guest');
-Route::get('data-imunisasi', [ImunisasiController::class, 'dataImunisasi'])->middleware('guest');
-Route::get('data-tumbuh-kembang-anak', [TumbuhKembangAnakController::class, 'dataTKA'])->middleware('guest');
+Route::get('all-berita/{beritum}', [BeritaController::class, 'show'])->middleware('isParent');
+Route::get('all-berita', [BeritaController::class, 'allBerita']);
+Route::get('data-imunisasi/{anak}', [ImunisasiController::class, 'dataImunisasi'])->middleware('isParent');
+Route::get('data-tumbuh-kembang-anak/{anak}', [TumbuhKembangAnakController::class, 'dataTKA'])->middleware('isParent');
 
 Route::get('/dashboard', function() {
     return view('dashboard', [
@@ -51,21 +53,39 @@ Route::get('/dashboard', function() {
         'tumbuhKA' => TumbuhKembangAnak::whereYear('tanggal', date('Y'))->whereMonth('tanggal', date('m'))->count(),
         'tumbuhKABI' => TumbuhKembangAnak::whereYear('tanggal', date('Y'))->count()
     ]);
-})->middleware('auth')->name('home');
+})->middleware('isAdmin');
 
-Route::resource('anak', AnakController::class)->middleware('auth');
-Route::resource('imunisasi', ImunisasiController::class)->middleware('auth');
-Route::resource('perkembangan-anak', TumbuhKembangAnakController::class)->middleware('auth');
-Route::resource('anggota', AnggotaController::class)->middleware('auth');
-Route::resource('berita', BeritaController::class)->middleware('auth');
-Route::resource('jadwal', JadwalController::class)->middleware('auth');
+Route::resource('anak', AnakController::class)->middleware('isAdmin');
+Route::resource('imunisasi', ImunisasiController::class)->middleware('isAdmin');
+Route::resource('perkembangan-anak', TumbuhKembangAnakController::class)->middleware('isAdmin');
+Route::resource('anggota', AnggotaController::class)->middleware('isAdmin');
+Route::resource('berita', BeritaController::class)->middleware('isAdmin');
+Route::resource('jadwal', JadwalController::class)->middleware('isAdmin');
+Route::resource('parent', ParenttController::class)->middleware('isAdmin');
 
 Route::post('cetakdataimunisasi', [ImunisasiController::class, 'cetak']);
 Route::post('cetakdataperkembangan', [TumbuhKembangAnakController::class, 'cetak']);
 
-Route::get('login', [AuthController::class, 'index'])->middleware('guest')->name('login');
-Route::post('login', [AuthController::class, 'authenticate'])->middleware('guest');
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::post('login', [AuthController::class, 'authenticate']);
 Route::post('logout', [AuthController::class, 'logout']);
 
-Route::get('/set-admin', [AuthController::class, 'showAdmin'])->middleware('auth');
-Route::post('/set-admin/{user}', [AuthController::class, 'updateAdmin'])->middleware('auth');
+Route::get('/set-admin', [AuthController::class, 'showAdmin'])->middleware('isAdmin');
+Route::post('/set-admin/{user}', [AuthController::class, 'updateAdmin'])->middleware('isAdmin');
+
+Route::get('/test', function() {
+    return Auth::guard('admin')->check();
+});
+
+Route::get('/test2', function() {
+    return Auth::guard('parent')->check();
+});
+
+Route::get('/login-user', [AuthController::class, 'loginUser']);
+Route::post('/login-user', [AuthController::class, 'authenticateUser']);
+
+Route::get('/cek-imunisasi-anak', [ImunisasiController::class, 'cekAnakImunisasi'])->middleware('isParent');
+
+Route::get('/cek-tumbuh-kembang-anak', [TumbuhKembangAnakController::class, 'cekTKA'])->middleware('isParent');
+
+Route::get('/profile', [ParenttController::class, 'show'])->middleware('isParent');

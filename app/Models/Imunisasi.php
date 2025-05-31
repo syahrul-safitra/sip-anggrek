@@ -11,19 +11,19 @@ class Imunisasi extends Model
 
     protected $fillable = [
         'jenis_imunisasi',
-        'kode_anak',
+        'nik_anak',
         'catatan',
         'tanggal',
     ];
 
     public function anak() {
-        return $this->belongsTo(Anak::class, 'kode_anak', 'kode_anak');
+        return $this->belongsTo(Anak::class, 'nik_anak', 'nik_anak');
     }
 
     public function scopeFilter($query, $search)
     {
         $query->when($search ?? false, function ($query, $search) {
-            return $query->where('kode_anak', '=',  $search );
+            return $query->where('nik_anak', '=',  $search );
         });
     }
 

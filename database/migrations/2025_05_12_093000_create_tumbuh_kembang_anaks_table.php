@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('tumbuh_kembang_anaks', function (Blueprint $table) {
             $table->id();
 
-            $table->string('kode_anak', 10);
+            $table->string('nik_anak', 16);
             $table->date('tanggal');
             $table->string('berat_badan');
             $table->string('tinggi_badan');
             $table->string('lingkar_kepala');
             $table->string('lingkar_lengan_atas');
 
-            $table->foreign('kode_anak')->references('kode_anak')->on('anaks')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('nik_anak')->references('nik_anak')->on('anaks')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

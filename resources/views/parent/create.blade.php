@@ -6,89 +6,37 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Form Data Anak</h4>
+                        <h4 class="card-title">Form Data Ayah</h4>
                         <div class="basic-form">
-                            <form action="{{ url('anak') }}" method="POST">
+                            <form action="{{ url('parent') }}" method="POST">
                                 @csrf
-
                                 <div class="row">
 
-                                    <div class="col-lg-6">
-
+                                    <div class="col-lg-8">
                                         <div class="form-group">
-                                            <label>Nama Ayah</label>
-                                            <select class="form-control" name="nik_ayah">
-                                                <option value="">Pilih</option>
-                                                @if (@old('nik_ayah'))
-                                                    @foreach ($parents as $item)
-                                                        @if (@old('nik_ayah') === $item->nik_ayah)
-                                                            <option value="{{ $item->nik_ayah }}" selected>
-                                                                {{ '( ' . $item->nik_ayah . '  ) ' . $item->nama_ayah }}
-                                                            </option>
-                                                        @else
-                                                            <option value="{{ $item->nik_ayah }}">
-                                                                {{ '( ' . $item->nik_ayah . '  ) ' . $item->nama_ayah }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    @foreach ($parents as $item)
-                                                        <option value="{{ $item->nik_ayah }}">
-                                                            {{ '( ' . $item->nik_ayah . '  ) ' . $item->nama_ayah }}
-                                                        </option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            <label for="" class="form-label">NIK</label>
+                                            <input type="text" name="nik_ayah"
+                                                class="form-control input-default @error('nik_ayah')
+                                                is-invalid
+                                            @enderror"
+                                                value="{{ @old('nik_ayah') }}" placeholder="nik_ayah">
 
                                             @error('nik_ayah')
-                                                <p class="text-danger">
+                                                <div class="invalid-feedback">
                                                     {{ $message }}
-                                                </p>
+                                                </div>
                                             @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="" class="form-label">Nama</label>
-                                            <input type="text" name="nama"
-                                                class="form-control input-default @error('nama')
-                                                    is-invalid
-                                                @enderror"
-                                                value="{{ @old('nama') }}" placeholder="Nama">
+                                            <input type="text" name="nama_ayah"
+                                                class="form-control input-default @error('nama_ayah')
+                                                is-invalid
+                                            @enderror"
+                                                value="{{ @old('nama_ayah') }}" placeholder="Nama_ayah">
 
-                                            @error('nama')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="" class="form-label">NIK Anak</label>
-                                            <input type="text" name="nik_anak"
-                                                class="form-control input-default @error('nik_anak')
-                                                    is-invalid
-                                                @enderror"
-                                                value="{{ @old('nik_anak') }}" placeholder="Kode Anak" name="nik_anak">
-
-                                            @error('nik_anak')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-
-                                        </div>
-
-                                        <div class="form-group">
-
-                                            <label for="" class="form-label">Tempat Lahir</label>
-                                            <input type="text" name="tempat_lahir"
-                                                class="form-control input-default @error('tempat_lahir')
-                                                    is-invalid
-                                                @enderror"
-                                                value="{{ @old('tempat_lahir') }}" placeholder="Tempat Lahir">
-
-                                            @error('tempat_lahir')
+                                            @error('nama_ayah')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -96,54 +44,60 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="" class="form-label">No KK</label>
+                                            <input type="text" name="no_kk"
+                                                class="form-control input-default @error('no_kk')
+                                                is-invalid
+                                            @enderror"
+                                                value="{{ @old('no_kk') }}" placeholder="no_kk">
 
-                                            <label for="">Jenis Kelamin</label>
-
-                                            <div>
-
-                                                <label class="radio-inline mr-3">
-                                                    <input type="radio" name="jenis_kelamin" value="laki-laki"
-                                                        @checked(@old('jenis_kelamin') === 'laki-laki')>
-                                                    Laki-Laki</label>
-                                                <label class="radio-inline mr-3">
-                                                    <input type="radio" name="jenis_kelamin" value="perempuan"
-                                                        @checked(@old('jenis_kelamin') === 'perempuan')>
-                                                    Perempuan</label>
-                                            </div>
-
-                                            @error('jenis_kelamin')
-                                                <p class="text-danger">
-                                                    {{ $message }}
-                                                </p>
-                                            @enderror
-
-                                        </div>
-
-                                        {{-- <div class="form-group">
-                                            <label for="" class="form-label">Nama Ibu</label>
-                                            <input type="text" name="nama_ibu"
-                                                class="form-control input-default @error('nama_ibu')
-                                                    is-invalid
-                                                @enderror"
-                                                value="{{ @old('nama_ibu') }}" placeholder="Nama Ibu">
-
-                                            @error('nama_ibu')
+                                            @error('no_kk')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
+                                        </div>
 
-                                        </div> --}}
+                                        <div class="form-group">
+                                            <label for="" class="form-label">No Telepon</label>
+                                            <input type="text" name="no_telepon"
+                                                class="form-control input-default @error('no_telepon')
+                                                is-invalid
+                                            @enderror"
+                                                value="{{ @old('no_telepon') }}" placeholder="no_telepon">
+
+                                            @error('no_telepon')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Password</label>
+                                            <input type="text" name="password"
+                                                class="form-control input-default @error('password')
+                                                is-invalid
+                                            @enderror"
+                                                value="{{ @old('password') }}" placeholder="password">
+
+                                            @error('password')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    {{-- <div class="col-lg-6">
                                         <div class="form-group">
 
                                             <label for="" class="form-label">Tanggal Lahir</label>
                                             <input type="date" name="tanggal_lahir"
                                                 class="form-control input-default @error('tanggal_lahir')
-                                                is-invalid
-                                            @enderror"
+                                            is-invalid
+                                        @enderror"
                                                 placeholder="Input Default" value="{{ @old('tanggal_lahir') }}">
 
                                             @error('tanggal_lahir')
@@ -182,8 +136,8 @@
                                             <label for="" class="form-label">Berat Lahir (kg)</label>
                                             <input type="text" name="berat_lahir"
                                                 class="form-control input-default @error('berat_lahir')
-                                                    is-invalid
-                                                @enderror"
+                                                is-invalid
+                                            @enderror"
                                                 value="{{ @old('berat_lahir') }}" placeholder="Tempat Lahir">
 
                                             @error('berat_lahir')
@@ -198,8 +152,8 @@
                                             <label for="" class="form-label">Tinggi Lahir (cm) </label>
                                             <input type="text" name="tinggi_lahir"
                                                 class="form-control input-default @error('tinggi_lahir')
-                                                    is-invalid
-                                                @enderror"
+                                                is-invalid
+                                            @enderror"
                                                 value="{{ @old('tinggi_lahir') }}" placeholder="Tempat Lahir">
 
                                             @error('tinggi_lahir')
@@ -209,12 +163,12 @@
                                             @enderror
                                         </div>
 
-                                    </div>
+                                    </div> --}}
 
 
                                 </div>
 
-                                <a class="btn btn-warning btn-sm" href="{{ url('anak') }}">Kembali</a>
+                                <a class="btn btn-warning btn-sm" href="{{ url('parent') }}">Kembali</a>
                                 <button class="btn btn-primary btn-sm">Simpan</button>
                             </form>
                         </div>

@@ -15,30 +15,30 @@
 
                                     <div class="col-lg-10">
                                         <div class="form-group">
-                                            <label>Kode Anak</label>
-                                            <select class="form-control" name="kode_anak">
+                                            <label>NIK Anak</label>
+                                            <select class="form-control" name="nik_anak">
                                                 <option value="">Pilih</option>
-                                                @if (@old('kode_anak', $perkembangan->kode_anak))
+                                                @if (@old('nik_anak', $perkembangan->nik_anak))
                                                     @foreach ($anaks as $item)
-                                                        @if (@old('kode_anak', $perkembangan->kode_anak) === $item->kode_anak)
-                                                            <option value="{{ $item->kode_anak }}" selected>
-                                                                {{ '( ' . $item->kode_anak . '  ) ' . $item->nama }}
+                                                        @if (@old('nik_anak', $perkembangan->nik_anak) === $item->nik_anak)
+                                                            <option value="{{ $item->nik_anak }}" selected>
+                                                                {{ '( ' . $item->nik_anak . '  ) ' . $item->nama }}
                                                             </option>
                                                         @else
-                                                            <option value="{{ $item->kode_anak }}">
-                                                                {{ '( ' . $item->kode_anak . '  ) ' . $item->nama }}
+                                                            <option value="{{ $item->nik_anak }}">
+                                                                {{ '( ' . $item->nik_anak . '  ) ' . $item->nama }}
                                                             </option>
                                                         @endif
                                                     @endforeach
                                                 @else
                                                     @foreach ($anaks as $item)
-                                                        <option value="{{ $item->kode_anak }}">
-                                                            {{ '( ' . $item->kode_anak . '  ) ' . $item->nama }}</option>
+                                                        <option value="{{ $item->nik_anak }}">
+                                                            {{ '( ' . $item->nik_anak . '  ) ' . $item->nama }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
 
-                                            @error('kode_anak')
+                                            @error('nik_anak')
                                                 <p class="text-danger">
                                                     {{ $message }}
                                                 </p>

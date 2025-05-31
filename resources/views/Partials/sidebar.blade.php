@@ -6,6 +6,11 @@
         </a>
     </li>
     <li>
+        <a href="{{ url('parent') }}" aria-expanded="false">
+            <i class="icon-user-female menu-icon"></i><span class="nav-text">Data Orang Tua</span>
+        </a>
+    </li>
+    <li>
         <a href="{{ url('anak') }}" aria-expanded="false">
             <i class="icon-people menu-icon"></i><span class="nav-text">Data Anak</span>
         </a>

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\TumbuhKembangAnak;
 use App\Models\Anak;
+use App\Models\Parentt;
 
+use Auth;
 use Illuminate\Http\Request;
 
 class TumbuhKembangAnakController extends Controller
@@ -16,7 +18,7 @@ class TumbuhKembangAnakController extends Controller
     {
 
         return view('perkembangan.index', [
-            'perkembangans' => TumbuhKembangAnak::latest()->get()
+            'perkembangans' => TumbuhKembangAnak::with('anak.parent')->latest()->get()
         ]);
     }
 
@@ -26,7 +28,7 @@ class TumbuhKembangAnakController extends Controller
     public function create()
     {
         return view('perkembangan.create', [
-            'anaks' => Anak::select('kode_anak', 'nama')->latest()->get()
+            'anaks' => Anak::select('nik_anak', 'nama')->orderBy('nama', 'ASC')->get()
         ]);
     }
 
@@ -36,7 +38,7 @@ class TumbuhKembangAnakController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kode_anak' => 'required',
+            'nik_anak' => 'required',
             'tanggal' => 'required',
             'berat_badan' => 'required|numeric', 
             'tinggi_badan' => 'required|numeric',
@@ -47,7 +49,7 @@ class TumbuhKembangAnakController extends Controller
         $getMonth = date('m', strtotime($validated['tanggal']));
         $getYear = date('Y', strtotime($validated['tanggal']));
 
-        $check = TumbuhKembangAnak::where('kode_anak', $validated['kode_anak'])->whereMonth('tanggal', $getMonth)->whereYear('tanggal', $getYear)->first();
+        $check = TumbuhKembangAnak::where('nik_anak', $validated['nik_anak'])->whereMonth('tanggal', $getMonth)->whereYear('tanggal', $getYear)->first();
 
         if ($check != null) {
             return back()->with('error', 'Data anak sudah di input bulan ini');
@@ -73,7 +75,7 @@ class TumbuhKembangAnakController extends Controller
     {
         return view('perkembangan.edit', [
             'perkembangan' => $perkembanganAnak,
-            'anaks' => Anak::select('kode_anak', 'nama')->latest()->get()
+            'anaks' => Anak::select('nik_anak', 'nama')->latest()->get()
         ]);
     }
 
@@ -83,7 +85,7 @@ class TumbuhKembangAnakController extends Controller
     public function update(Request $request, TumbuhKembangAnak $perkembanganAnak)
     {
         $validated = $request->validate([
-            'kode_anak' => 'required',
+            'nik_anak' => 'required',
             'tanggal' => 'required',
             'berat_badan' => 'required|numeric', 
             'tinggi_badan' => 'required|numeric',
@@ -107,7 +109,7 @@ class TumbuhKembangAnakController extends Controller
     }
 
     public function cetak(Request $request) {
-        $data = TumbuhKembangAnak::with('anak')->whereBetween('tanggal', [$request->tanggal_awal, $request->tanggal_akhir])->get();        
+        $data = TumbuhKembangAnak::with('anak.parent')->whereBetween('tanggal', [$request->tanggal_awal, $request->tanggal_akhir])->get();        
 
         return view('perkembangan.cetak', [
             'dataImunisasis' => $data, 
@@ -116,59 +118,90 @@ class TumbuhKembangAnakController extends Controller
         ]);
     }
 
-    public function dataTKA() {
-
+    public function dataTKA(Anak $anak) {
 
         $tahunSekarang = date('Y');
-        $show = false;
-        $message = 'Silahkan masukan kode';
+        // $show = false;
+        // $message = 'Silahkan masukan kode';
         $dataBerat = [];
         $dataTinggi = [];
         $dataLingkarKepala = [];
         $dataLingkarLenganAtas = [];
 
-        if (request('kode')) {
+        $anak->load('tumbuhKembang');
 
-            $check = Anak::where('kode_anak', request('kode'))->first();
+        // ============================================================================================================
 
-
-
-
-            if ($check != null) {
-                $show = true;
-
-                for($i = 1; $i <= 12; $i++) {
-                    // $getData = TumbuhKembangAnak::where('kode_anak', request('kode'))->whereMonth('tanggal', $i)->whereYear('tanggal', $tahunSekarang)->first();
-                    $getData = TumbuhKembangAnak::where('kode_anak', request('kode'))->whereMonth('tanggal', $i)->whereYear('tanggal', $tahunSekarang)->first();
-    
-                    
-                    if ($getData == null) {
-                        $dataBerat[] = 0;
-                        $dataTinggi[] = 0;
-                        $dataLingkarKepala[] = 0;
-                        $dataLingkarLenganAtas[] = 0;
-                    } else {
-                        $dataBerat[] = $getData['berat_badan'];
-                        $dataTinggi[] = $getData['tinggi_badan'];
-                        $dataLingkarKepala[] = $getData['lingkar_kepala'];
-                        $dataLingkarLenganAtas[] = $getData['lingkar_lengan_atas'];
-                    }
-                }
-                
+        for($i = 1; $i <= 12; $i++) {
+            $getData = TumbuhKembangAnak::where('nik_anak', $anak->nik_anak)->whereMonth('tanggal', $i)->whereYear('tanggal', $tahunSekarang)->first();
+            if ($getData == null) {
+                $dataBerat[] = 0;
+                $dataTinggi[] = 0;
+                $dataLingkarKepala[] = 0;
+                $dataLingkarLenganAtas[] = 0;
+            } else {
+                $dataBerat[] = $getData['berat_badan'];
+                $dataTinggi[] = $getData['tinggi_badan'];
+                $dataLingkarKepala[] = $getData['lingkar_kepala'];
+                $dataLingkarLenganAtas[] = $getData['lingkar_lengan_atas'];
             }
         }
-        
-        
 
-        return view('user.tumbuhKembangAnak', [
+
+
+        // ============================================================================================================
+
+
+        // if (request('kode')) {
+
+        //     $check = Anak::where('kode_anak', request('kode'))->first();
+
+        //     if ($check != null) {
+        //         $show = true;
+
+        //         for($i = 1; $i <= 12; $i++) {
+        //             // $getData = TumbuhKembangAnak::where('kode_anak', request('kode'))->whereMonth('tanggal', $i)->whereYear('tanggal', $tahunSekarang)->first();
+        //             $getData = TumbuhKembangAnak::where('kode_anak', request('kode'))->whereMonth('tanggal', $i)->whereYear('tanggal', $tahunSekarang)->first();
+    
+                    
+        //             if ($getData == null) {
+        //                 $dataBerat[] = 0;
+        //                 $dataTinggi[] = 0;
+        //                 $dataLingkarKepala[] = 0;
+        //                 $dataLingkarLenganAtas[] = 0;
+        //             } else {
+        //                 $dataBerat[] = $getData['berat_badan'];
+        //                 $dataTinggi[] = $getData['tinggi_badan'];
+        //                 $dataLingkarKepala[] = $getData['lingkar_kepala'];
+        //                 $dataLingkarLenganAtas[] = $getData['lingkar_lengan_atas'];
+        //             }
+        //         }
+                
+        //     }
+        // }
+    
+        return view('user.cekTumbuhKembangAnak', [
             // 'tumbuhKembangAnaks' => TumbuhKembangAnak::latest()->get(), 
-            'show' => $show, 
-            'message' => $message,
+            // 'show' => $show, 
+            // 'message' => $message,
             'dataBerat' => $dataBerat,
             'dataTinggi' => $dataTinggi,
             'dataLingkarKepala' => $dataLingkarKepala, 
             'dataLingkarLenganAtas' => $dataLingkarLenganAtas,
-            'label' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+            'label' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'], 
+            'perkembangans' => $anak->tumbuhKembang
         ]);
+    }
+
+    public function cekTKA() {
+        $getId = Auth::guard('parent')->user();
+        
+        $user = Parentt::find($getId->id);
+
+        return view('user.tumbuhKembangAnak2', [
+            'parent' => Auth::guard('parent')->user(),
+            'anaks' => $user->anak
+        ]);
+
     }
 }

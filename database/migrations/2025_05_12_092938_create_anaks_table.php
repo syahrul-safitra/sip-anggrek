@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('anaks', function (Blueprint $table) {
             $table->id();
-
-            $table->string('kode_anak', 5)->unique();
-
+            $table->string('nik_anak', 16)->unique();
             $table->string('nama');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
@@ -23,7 +21,9 @@ return new class extends Migration
             $table->string(column: 'berat_lahir');
             $table->string('tinggi_lahir');
             $table->enum('proses_melahirkan', ['normal', 'sesar']);
-            $table->string('nama_ibu');
+
+            $table->string('nik_ayah');
+            $table->foreign('nik_ayah')->references('nik_ayah')->on('parentts')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();
         });

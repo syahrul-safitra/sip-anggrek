@@ -16,11 +16,12 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-            /* height: 100vh; */
+            font-size: 10pt
+                /* height: 100vh; */
         }
 
         .container {
-            width: 1000px;
+            width: 100%px;
             margin: 0 auto;
         }
 
@@ -93,7 +94,7 @@
         <div class="garis">
         </div> --}}
 
-        <div class="kopsurat" style="width: 700px">
+        <div class="kopsurat" style="width: 100%">
             <table class="table-1">
                 <tr>
                     <td>
@@ -110,11 +111,11 @@
             </table>
         </div>
 
-        <div class="garis" style="width: 700px">
+        <div class="garis" style="width: width: 100%">
         </div>
 
         <!-- table content -->
-        <div class="content" style="width: 700px">
+        <div class="content" style="width: width: 100%">
 
             <h3>Laporan Data Imunisasi</h3><br>
             <h4>Periode {{ date('d-m-Y', strtotime($tanggal_awal)) }} - {{ date('d-m-Y', strtotime($tanggal_akhir)) }}
@@ -124,8 +125,10 @@
             <table class="main" border="1" bordercollapse="collapse">
                 <tr>
                     <th>No</th>
-                    <th>Kode</th>
-                    <th>Nama</th>
+                    <th>NIK Anak</th>
+                    <th>Nama Anak</th>
+                    <th>NIK Ayah</th>
+                    <th>Nama Ayah</th>
                     <th>Tanggal</th>
                     <th>Berat Badan (kg)</th>
                     <th>Tinggi Badan (cm)</th>
@@ -135,8 +138,10 @@
                 @foreach ($dataImunisasis as $data)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $data->kode_anak }}</td>
+                        <td>{{ $data->nik_anak }}</td>
                         <td>{{ $data->anak->nama }}</td>
+                        <td>{{ $data->anak->parent->nik_ayah }}</td>
+                        <td>{{ $data->anak->parent->nama_ayah }}</td>
                         <td>{{ date('d-m-Y', strtotime($data->tanggal)) }}</td>
                         <td>{{ $data->berat_badan }}</td>
                         <td>{{ $data->tinggi_badan }}</td>

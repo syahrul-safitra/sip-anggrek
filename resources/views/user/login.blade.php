@@ -46,18 +46,19 @@
                                 @endif
 
 
-                                <form class="mt-5 mb-5 login-input" action="{{ url('login') }}" method="POST">
+                                <form class="mt-5 mb-5 login-input" action="{{ url('login-user') }}" method="POST">
                                     @csrf
                                     <div class="form-group">
-                                        <input type="email" class="form-control" placeholder="Email" name="email">
+                                        <input type="text" class="form-control" placeholder="No Telepon"
+                                            name="no_telepon">
                                     </div>
                                     <div class="form-group">
                                         <input type="password" class="form-control" placeholder="Password"
                                             name="password">
                                     </div>
                                     <button class="btn login-form__btn submit w-100 mb-3">Login</button>
-                                    <a href="{{ url('/login-user') }}"
-                                        class="btn login-form__btn w-100 text-white">Login Orang Tua</a>
+                                    <a href="{{ url('/login') }}" class="btn login-form__btn w-100 text-white">Login
+                                        Admin</a>
                                 </form>
                                 {{-- <p class="mt-5 login-form__footer">Dont have account? <a href="page-register.html"
                                         class="text-primary">Sign Up</a> now</p> --}}

@@ -28,11 +28,11 @@ return new class extends Migration
                 'VIT A'  
             ]);
 
-            $table->string('kode_anak', 10);
+            $table->string('nik_anak', 16);
             $table->text('catatan')->nullable();
             $table->date('tanggal');
 
-            $table->foreign('kode_anak')->references('kode_anak')->on('anaks')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('nik_anak')->references('nik_anak')->on('anaks')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
         });

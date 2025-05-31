@@ -16,6 +16,39 @@
                                 <div class="row">
 
                                     <div class="col-lg-6">
+
+                                        <div class="form-group">
+                                            <label>Nama Ayah</label>
+                                            <select class="form-control" name="nik_ayah">
+                                                <option value="">Pilih</option>
+                                                @if (@old('nik_ayah', $anak->nik_ayah))
+                                                    @foreach ($parents as $item)
+                                                        @if (@old('nik_ayah', $anak->nik_ayah) === $item->nik_ayah)
+                                                            <option value="{{ $item->nik_ayah }}" selected>
+                                                                {{ '( ' . $item->nik_ayah . '  ) ' . $item->nama_ayah }}
+                                                            </option>
+                                                        @else
+                                                            <option value="{{ $item->nik_ayah }}">
+                                                                {{ '( ' . $item->nik_ayah . '  ) ' . $item->nama_ayah }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    @foreach ($parents as $item)
+                                                        <option value="{{ $item->nik_ayah }}">
+                                                            {{ '( ' . $item->nik_ayah . '  ) ' . $item->nama_ayah }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+
+                                            @error('nik_ayah')
+                                                <p class="text-danger">
+                                                    {{ $message }}
+                                                </p>
+                                            @enderror
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="" class="form-label">Nama</label>
                                             <input type="text" name="nama"
@@ -31,22 +64,25 @@
                                             @enderror
 
                                         </div>
+
                                         <div class="form-group">
-                                            <label for="" class="form-label">Kode Anak</label>
-                                            <input type="text" name="kode_anak"
-                                                class="form-control input-default @error('kode_anak')
+                                            <label for="" class="form-label">NIK Anak</label>
+                                            <input type="text" name="nik_anak"
+                                                class="form-control input-default @error('nik_anak')
                                                     is-invalid
                                                 @enderror"
-                                                value="{{ @old('kode_anak', $anak->kode_anak) }}" placeholder="Kode Anak"
-                                                name="kode_anak">
+                                                value="{{ @old('nik_anak', $anak->nik_anak) }}" placeholder="Kode Anak"
+                                                name="nik_anak">
 
-                                            @error('kode_anak')
+                                            @error('nik_anak')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
 
                                         </div>
+
+
                                         <div class="form-group">
 
                                             <label for="" class="form-label">Tempat Lahir</label>
@@ -88,7 +124,7 @@
 
                                         </div>
 
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <label for="" class="form-label">Nama Ibu</label>
                                             <input type="text" name="nama_ibu"
                                                 class="form-control input-default @error('nama_ibu')
@@ -102,7 +138,7 @@
                                                 </div>
                                             @enderror
 
-                                        </div>
+                                        </div> --}}
                                     </div>
 
                                     <div class="col-lg-6">
